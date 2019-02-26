@@ -94,7 +94,7 @@ int main (){
     shared_stuff->M[1][3] = 8;
     shared_stuff->M[2][3] = 1;
     shared_stuff->M[3][3] = 5;
-
+    
     //Init N
     shared_stuff->N[0][0] = 1;
     shared_stuff->N[1][0] = 2;
@@ -114,41 +114,41 @@ int main (){
     shared_stuff->N[3][3] = 2;
     
     
-//    //Init M
-//    shared_stuff->M[0][0] = 1;
-//    shared_stuff->M[1][0] = 2;
-//    shared_stuff->M[2][0] = 3;
-//    shared_stuff->M[3][0] = 4;
-//    shared_stuff->M[0][1] = 1;
-//    shared_stuff->M[1][1] = 2;
-//    shared_stuff->M[2][1] = 3;
-//    shared_stuff->M[3][1] = 4;
-//    shared_stuff->M[0][2] = 1;
-//    shared_stuff->M[1][2] = 2;
-//    shared_stuff->M[2][2] = 3;
-//    shared_stuff->M[3][2] = 4;
-//    shared_stuff->M[0][3] = 1;
-//    shared_stuff->M[1][3] = 2;
-//    shared_stuff->M[2][3] = 3;
-//    shared_stuff->M[3][3] = 4;
-//
-//    //Init N
-//    shared_stuff->N[0][0] = 1;
-//    shared_stuff->N[1][0] = 2;
-//    shared_stuff->N[2][0] = 3;
-//    shared_stuff->N[3][0] = 4;
-//    shared_stuff->N[0][1] = 1;
-//    shared_stuff->N[1][1] = 2;
-//    shared_stuff->N[2][1] = 3;
-//    shared_stuff->N[3][1] = 4;
-//    shared_stuff->N[0][2] = 1;
-//    shared_stuff->N[1][2] = 2;
-//    shared_stuff->N[2][2] = 3;
-//    shared_stuff->N[3][2] = 4;
-//    shared_stuff->N[0][3] = 1;
-//    shared_stuff->N[1][3] = 2;
-//    shared_stuff->N[2][3] = 3;
-//    shared_stuff->N[3][3] = 4;
+    //    //Init M
+    //    shared_stuff->M[0][0] = 1;
+    //    shared_stuff->M[1][0] = 2;
+    //    shared_stuff->M[2][0] = 3;
+    //    shared_stuff->M[3][0] = 4;
+    //    shared_stuff->M[0][1] = 1;
+    //    shared_stuff->M[1][1] = 2;
+    //    shared_stuff->M[2][1] = 3;
+    //    shared_stuff->M[3][1] = 4;
+    //    shared_stuff->M[0][2] = 1;
+    //    shared_stuff->M[1][2] = 2;
+    //    shared_stuff->M[2][2] = 3;
+    //    shared_stuff->M[3][2] = 4;
+    //    shared_stuff->M[0][3] = 1;
+    //    shared_stuff->M[1][3] = 2;
+    //    shared_stuff->M[2][3] = 3;
+    //    shared_stuff->M[3][3] = 4;
+    //
+    //    //Init N
+    //    shared_stuff->N[0][0] = 1;
+    //    shared_stuff->N[1][0] = 2;
+    //    shared_stuff->N[2][0] = 3;
+    //    shared_stuff->N[3][0] = 4;
+    //    shared_stuff->N[0][1] = 1;
+    //    shared_stuff->N[1][1] = 2;
+    //    shared_stuff->N[2][1] = 3;
+    //    shared_stuff->N[3][1] = 4;
+    //    shared_stuff->N[0][2] = 1;
+    //    shared_stuff->N[1][2] = 2;
+    //    shared_stuff->N[2][2] = 3;
+    //    shared_stuff->N[3][2] = 4;
+    //    shared_stuff->N[0][3] = 1;
+    //    shared_stuff->N[1][3] = 2;
+    //    shared_stuff->N[2][3] = 3;
+    //    shared_stuff->N[3][3] = 4;
     
     
     printf("Matrix M \n");
@@ -183,16 +183,16 @@ int main (){
             //child process 1
             //printf("%d \n", shared_stuff->M[1][1]);
             
+            printf("Child process 1 working with row 1 \n");
             
-            
-                //go through row 1 and calculate
-                for (int k = 0; k < 4; k++){
-                    shared_stuff->Q[0][k] = 0;
-                    
-                    for(int j = 0;j < 4;j++){
-                        shared_stuff->Q[0][k] += shared_stuff->M[0][j] * shared_stuff->N[j][k];
-                    }
+            //go through row 1 and calculate
+            for (int k = 0; k < 4; k++){
+                shared_stuff->Q[0][k] = 0;
+                
+                for(int j = 0;j < 4;j++){
+                    shared_stuff->Q[0][k] += shared_stuff->M[0][j] * shared_stuff->N[j][k];
                 }
+            }
             
             //flag that its been written
             shared_stuff->written = 1;
@@ -213,7 +213,7 @@ int main (){
                     
                     shared_stuff->written = 0; //close flag
                     
-//                    printf("%d %d %d %d \n", shared_stuff->Q[0][0], shared_stuff->Q[1][0], shared_stuff->Q[2][0], shared_stuff->Q[3][0]);
+                    //                    printf("%d %d %d %d \n", shared_stuff->Q[0][0], shared_stuff->Q[1][0], shared_stuff->Q[2][0], shared_stuff->Q[3][0]);
                     
                     
                     running = 0;
@@ -228,157 +228,173 @@ int main (){
             
     }
     
-        running = 1;
+    running = 1;
     
-        pid_t n2 = fork();
-
-        switch(n2) {
-
-            case -1:
-
-                perror("Fork failed \n");
-                exit(1);
-            case 0:
-
-                //child process 2
-                //printf("%d \n", shared_stuff->M[1][1]);
-                for (int k = 0; k < 4; k++){
-                    shared_stuff->Q[1][k] = 0;
-                    
-                    for(int j = 0;j < 4;j++){
-                        shared_stuff->Q[1][k] += shared_stuff->M[1][j] * shared_stuff->N[j][k];
-                    }
+    pid_t n2 = fork();
+    
+    switch(n2) {
+            
+        case -1:
+            
+            perror("Fork failed \n");
+            exit(1);
+        case 0:
+            
+            //child process 2
+            //printf("%d \n", shared_stuff->M[1][1]);
+            
+            printf("Child process 2 working with row 2 \n");
+            
+            for (int k = 0; k < 4; k++){
+                shared_stuff->Q[1][k] = 0;
+                
+                for(int j = 0;j < 4;j++){
+                    shared_stuff->Q[1][k] += shared_stuff->M[1][j] * shared_stuff->N[j][k];
                 }
-
-                shared_stuff->written = 1;
-
-                break;
-
-            default:
-
-                while(running) {
-
-                    if(shared_stuff->written) {
-                        //flag is raised, done this row
-                       // printf("Done row 2! \n");
-
-                        printf("%d %d %d %d \n", shared_stuff->Q[1][0], shared_stuff->Q[1][1], shared_stuff->Q[1][2], shared_stuff->Q[1][3]);
-
-                        shared_stuff->written = 0; //close flag
-                        running = 0;
-                    }
-
-
-
-                }  //going to add this part after - will cause a crash rn
-
-                _Exit(EXIT_SUCCESS);
-                break;
-
-        }
-
-        running = 1;
-
-        pid_t n3 = fork();
-
-        switch(n3) {
-
-            case -1:
-
-                perror("Fork failed \n");
-                exit(1);
-            case 0:
-
-                //child process 3
-                //printf("%d \n", shared_stuff->M[1][1]);
-
-                for (int k = 0; k < 4; k++){
-                    shared_stuff->Q[2][k] = 0;
+            }
+            
+            shared_stuff->written = 1;
+            
+            break;
+            
+        default:
+            
+            while(running) {
+                
+                if(shared_stuff->written) {
+                    //flag is raised, done this row
+                    // printf("Done row 2! \n");
                     
-                    for(int j = 0;j < 4;j++){
-                        shared_stuff->Q[2][k] += shared_stuff->M[2][j] * shared_stuff->N[j][k];
-                    }
-                }
-
-                shared_stuff->written = 1;
-
-                break;
-
-            default:
-                while(running) {
-
-                    if(shared_stuff->written) {
-                        //flag is raised, done this row
-                        //printf("Done row 3! \n");
-
-                        printf("%d %d %d %d \n", shared_stuff->Q[2][0], shared_stuff->Q[2][1], shared_stuff->Q[2][2], shared_stuff->Q[2][3]);
-
-                        shared_stuff->written = 0; //close flag
-                        running = 0;
-                    }
-
-
-
-                }  //going to add this part after - will cause a crash rn
-
-                _Exit(EXIT_SUCCESS);
-                break;
-
-        }
-
-        running = 1;
-
-        pid_t n4 = fork();
-
-        switch(n4) {
-
-            case -1:
-
-                perror("Fork failed \n");
-                exit(1);
-            case 0:
-
-                //child process 4
-                //printf("%d \n", shared_stuff->M[1][1]);
-
-                for (int k = 0; k < 4; k++){
-                    shared_stuff->Q[3][k] = 0;
+                    printf("%d %d %d %d \n", shared_stuff->Q[1][0], shared_stuff->Q[1][1], shared_stuff->Q[1][2], shared_stuff->Q[1][3]);
                     
-                    for(int j = 0;j < 4;j++){
-                        shared_stuff->Q[3][k] += shared_stuff->M[3][j] * shared_stuff->N[j][k];
-                    }
+                    shared_stuff->written = 0; //close flag
+                    running = 0;
                 }
-
-                shared_stuff->written = 1;
-
-                break;
-
-            default:
-
-                while(running) {
-
-                    if(shared_stuff->written) {
-                        //flag is raised, done this row
-                        //printf("Done row 4! \n");
-
-                        printf("%d %d %d %d \n", shared_stuff->Q[3][0], shared_stuff->Q[3][1], shared_stuff->Q[3][2], shared_stuff->Q[3][3]);
-
-                        shared_stuff->written = 0; //close flag
-                        running = 0;
-                    }
-
-
-
-                }  //going to add this part after - will cause a crash rn
-
-                _Exit(EXIT_SUCCESS);
-                break;
-
-        }
+                
+                
+                
+            }  //going to add this part after - will cause a crash rn
+            
+            _Exit(EXIT_SUCCESS);
+            break;
+            
+    }
+    
+    running = 1;
+    
+    pid_t n3 = fork();
+    
+    switch(n3) {
+            
+        case -1:
+            
+            perror("Fork failed \n");
+            exit(1);
+        case 0:
+            
+            //child process 3
+            //printf("%d \n", shared_stuff->M[1][1]);
+            
+            printf("Child process 3 working with row 3 \n");
+            
+            for (int k = 0; k < 4; k++){
+                shared_stuff->Q[2][k] = 0;
+                
+                for(int j = 0;j < 4;j++){
+                    shared_stuff->Q[2][k] += shared_stuff->M[2][j] * shared_stuff->N[j][k];
+                }
+            }
+            
+            shared_stuff->written = 1;
+            
+            break;
+            
+        default:
+            while(running) {
+                
+                if(shared_stuff->written) {
+                    //flag is raised, done this row
+                    //printf("Done row 3! \n");
+                    
+                    printf("%d %d %d %d \n", shared_stuff->Q[2][0], shared_stuff->Q[2][1], shared_stuff->Q[2][2], shared_stuff->Q[2][3]);
+                    
+                    shared_stuff->written = 0; //close flag
+                    running = 0;
+                }
+                
+                
+                
+            }  //going to add this part after - will cause a crash rn
+            
+            _Exit(EXIT_SUCCESS);
+            break;
+            
+    }
+    
+    running = 1;
+    
+    pid_t n4 = fork();
+    
+    switch(n4) {
+            
+        case -1:
+            
+            perror("Fork failed \n");
+            exit(1);
+        case 0:
+            
+            //child process 4
+            //printf("%d \n", shared_stuff->M[1][1]);
+            
+            printf("Child process 4 working with row 4 \n");
+            
+            for (int k = 0; k < 4; k++){
+                shared_stuff->Q[3][k] = 0;
+                
+                for(int j = 0;j < 4;j++){
+                    shared_stuff->Q[3][k] += shared_stuff->M[3][j] * shared_stuff->N[j][k];
+                }
+            }
+            
+            shared_stuff->written = 1;
+            
+            break;
+            
+        default:
+            
+            while(running) {
+                
+                if(shared_stuff->written) {
+                    //flag is raised, done this row
+                    //printf("Done row 4! \n");
+                    
+                    printf("%d %d %d %d \n", shared_stuff->Q[3][0], shared_stuff->Q[3][1], shared_stuff->Q[3][2], shared_stuff->Q[3][3]);
+                    
+                    shared_stuff->written = 0; //close flag
+                    running = 0;
+                }
+                
+                
+                
+            }  //going to add this part after - will cause a crash rn
+            
+            _Exit(EXIT_SUCCESS);
+            break;
+            
+    }
+    
+    printf("\n");
+    
+    printf("%d %d %d %d \n", shared_stuff->Q[0][0], shared_stuff->Q[0][1], shared_stuff->Q[0][2], shared_stuff->Q[0][3]);
+    
+    printf("%d %d %d %d \n", shared_stuff->Q[1][0], shared_stuff->Q[1][1], shared_stuff->Q[1][2], shared_stuff->Q[1][3]);
+    
+    printf("%d %d %d %d \n", shared_stuff->Q[2][0], shared_stuff->Q[2][1], shared_stuff->Q[2][2], shared_stuff->Q[2][3]);
     
     
     
-        return 0;
+    
+    //return 0;
     
     
     
