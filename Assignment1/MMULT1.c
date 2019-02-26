@@ -5,7 +5,7 @@
 //  Created by Abhiram Santhosh on 2/23/19.
 //
 
-#include "Assignment1.h"
+#include "MMULT1.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -94,7 +94,7 @@ int main (){
     shared_stuff->M[1][3] = 8;
     shared_stuff->M[2][3] = 1;
     shared_stuff->M[3][3] = 5;
-    
+
     //Init N
     shared_stuff->N[0][0] = 1;
     shared_stuff->N[1][0] = 2;
@@ -113,13 +113,56 @@ int main (){
     shared_stuff->N[2][3] = 7;
     shared_stuff->N[3][3] = 2;
     
+    
+//    //Init M
+//    shared_stuff->M[0][0] = 1;
+//    shared_stuff->M[1][0] = 2;
+//    shared_stuff->M[2][0] = 3;
+//    shared_stuff->M[3][0] = 4;
+//    shared_stuff->M[0][1] = 1;
+//    shared_stuff->M[1][1] = 2;
+//    shared_stuff->M[2][1] = 3;
+//    shared_stuff->M[3][1] = 4;
+//    shared_stuff->M[0][2] = 1;
+//    shared_stuff->M[1][2] = 2;
+//    shared_stuff->M[2][2] = 3;
+//    shared_stuff->M[3][2] = 4;
+//    shared_stuff->M[0][3] = 1;
+//    shared_stuff->M[1][3] = 2;
+//    shared_stuff->M[2][3] = 3;
+//    shared_stuff->M[3][3] = 4;
+//
+//    //Init N
+//    shared_stuff->N[0][0] = 1;
+//    shared_stuff->N[1][0] = 2;
+//    shared_stuff->N[2][0] = 3;
+//    shared_stuff->N[3][0] = 4;
+//    shared_stuff->N[0][1] = 1;
+//    shared_stuff->N[1][1] = 2;
+//    shared_stuff->N[2][1] = 3;
+//    shared_stuff->N[3][1] = 4;
+//    shared_stuff->N[0][2] = 1;
+//    shared_stuff->N[1][2] = 2;
+//    shared_stuff->N[2][2] = 3;
+//    shared_stuff->N[3][2] = 4;
+//    shared_stuff->N[0][3] = 1;
+//    shared_stuff->N[1][3] = 2;
+//    shared_stuff->N[2][3] = 3;
+//    shared_stuff->N[3][3] = 4;
+    
+    
+    printf("Matrix M \n");
     printf("%d %d %d %d \n", shared_stuff->M[0][0], shared_stuff->M[1][0], shared_stuff->M[2][0], shared_stuff->M[3][0]);
     printf("%d %d %d %d \n", shared_stuff->M[0][1], shared_stuff->M[1][1], shared_stuff->M[2][1], shared_stuff->M[3][1]);
     printf("%d %d %d %d \n", shared_stuff->M[0][2], shared_stuff->M[1][2], shared_stuff->M[2][2], shared_stuff->M[3][2]);
     printf("%d %d %d %d \n", shared_stuff->M[0][3], shared_stuff->M[1][3], shared_stuff->M[2][3], shared_stuff->M[3][3]);
     
+    
+    
     printf("\n");
     
+    
+    printf("Matrix N \n");
     printf("%d %d %d %d \n", shared_stuff->N[0][0], shared_stuff->N[1][0], shared_stuff->N[2][0], shared_stuff->N[3][0]);
     printf("%d %d %d %d \n", shared_stuff->N[0][1], shared_stuff->N[1][1], shared_stuff->N[2][1], shared_stuff->N[3][1]);
     printf("%d %d %d %d \n", shared_stuff->N[0][2], shared_stuff->N[1][2], shared_stuff->N[2][2], shared_stuff->N[3][2]);
@@ -142,7 +185,7 @@ int main (){
             
             
             
-            
+                //go through row 1 and calculate
                 for (int k = 0; k < 4; k++){
                     shared_stuff->Q[0][k] = 0;
                     
@@ -151,7 +194,7 @@ int main (){
                     }
                 }
             
-            
+            //flag that its been written
             shared_stuff->written = 1;
             
             printf("%d %d %d %d \n", shared_stuff->Q[0][0], shared_stuff->Q[0][1], shared_stuff->Q[0][2], shared_stuff->Q[0][3]);
@@ -166,7 +209,7 @@ int main (){
                 
                 if(shared_stuff->written) {
                     //flag is raised, done this row
-                    printf("Done row 1! \n");
+                    //printf("Done row 1! \n");
                     
                     shared_stuff->written = 0; //close flag
                     
@@ -200,10 +243,10 @@ int main (){
                 //child process 2
                 //printf("%d \n", shared_stuff->M[1][1]);
                 for (int k = 0; k < 4; k++){
-                    shared_stuff->Q[0][k] = 0;
+                    shared_stuff->Q[1][k] = 0;
                     
                     for(int j = 0;j < 4;j++){
-                        shared_stuff->Q[0][k] += shared_stuff->M[0][j] * shared_stuff->N[j][k];
+                        shared_stuff->Q[1][k] += shared_stuff->M[1][j] * shared_stuff->N[j][k];
                     }
                 }
 
@@ -217,7 +260,7 @@ int main (){
 
                     if(shared_stuff->written) {
                         //flag is raised, done this row
-                        printf("Done row 2! \n");
+                       // printf("Done row 2! \n");
 
                         printf("%d %d %d %d \n", shared_stuff->Q[1][0], shared_stuff->Q[1][1], shared_stuff->Q[1][2], shared_stuff->Q[1][3]);
 
@@ -250,10 +293,10 @@ int main (){
                 //printf("%d \n", shared_stuff->M[1][1]);
 
                 for (int k = 0; k < 4; k++){
-                    shared_stuff->Q[0][k] = 0;
+                    shared_stuff->Q[2][k] = 0;
                     
                     for(int j = 0;j < 4;j++){
-                        shared_stuff->Q[0][k] += shared_stuff->M[0][j] * shared_stuff->N[j][k];
+                        shared_stuff->Q[2][k] += shared_stuff->M[2][j] * shared_stuff->N[j][k];
                     }
                 }
 
@@ -266,7 +309,7 @@ int main (){
 
                     if(shared_stuff->written) {
                         //flag is raised, done this row
-                        printf("Done row 3! \n");
+                        //printf("Done row 3! \n");
 
                         printf("%d %d %d %d \n", shared_stuff->Q[2][0], shared_stuff->Q[2][1], shared_stuff->Q[2][2], shared_stuff->Q[2][3]);
 
@@ -299,10 +342,10 @@ int main (){
                 //printf("%d \n", shared_stuff->M[1][1]);
 
                 for (int k = 0; k < 4; k++){
-                    shared_stuff->Q[0][k] = 0;
+                    shared_stuff->Q[3][k] = 0;
                     
                     for(int j = 0;j < 4;j++){
-                        shared_stuff->Q[0][k] += shared_stuff->M[0][j] * shared_stuff->N[j][k];
+                        shared_stuff->Q[3][k] += shared_stuff->M[3][j] * shared_stuff->N[j][k];
                     }
                 }
 
@@ -316,7 +359,7 @@ int main (){
 
                     if(shared_stuff->written) {
                         //flag is raised, done this row
-                        printf("Done row 4! \n");
+                        //printf("Done row 4! \n");
 
                         printf("%d %d %d %d \n", shared_stuff->Q[3][0], shared_stuff->Q[3][1], shared_stuff->Q[3][2], shared_stuff->Q[3][3]);
 
