@@ -1,0 +1,1 @@
+Open a terminal and CD into the folder where the MMULT1 and MMULT2 files are. When in the folder, type in Ògcc MMULT1.c -o MMULT1Ó and Ògcc MMULT2.c -o MMULT2Ó Ð this will compile both files. Once compiled type Ò./MMULT1Ó to run MMULT1 (part1) and Ò./MMULT2Ó to run MMULT2 (part2).
