@@ -54,6 +54,7 @@ int main(){
     struct shared_use *shared_stuff;
     int index;
     pid_t pid;
+    int waitTIme;
     
     srand((unsigned int)getpid());
     
@@ -115,6 +116,7 @@ int main(){
                 exit(1);
                 
             case 0:
+                
                 //child processes
                 //the while loop is essential because
                 //you need to iterate multiple times, doing what I did last assignment wont work because that doesn't use a loop
@@ -122,6 +124,8 @@ int main(){
                 //using other algorithms might be an option, but would make it harder
                 
                 //seperated for readability
+                
+                int temp = 0; //temp for switching variables around
                 
                 while (!(shared_stuff->B[0] >shared_stuff->B[1] &&
                          
@@ -134,14 +138,105 @@ int main(){
                     
                     if(index == 0){
                         //first child
+                        
+                        //waiting for semaphore 1
+                        if (!semaphore_p(1))  exit(EXIT_FAILURE);
+                        
+                        if(shared_stuff->B[0] < shared_stuff->B[1]){
+                            
+                            temp = shared_stuff->B[0];
+                            shared_stuff->B[0] = shared_stuff->B[1];
+                            shared_stuff->B[1] = temp;
+                            
+                        }
+                        
+                        if (!semaphore_v(1)) exit(EXIT_FAILURE); //Semaphore 1 has been released
+                        
+                       
+                        
+                        
+                    } else if(index == 1){
+                        
+                        //second paid
+                        if(!semaphore_p(1) || !semaphore_p(2)) exit(EXIT_FAILURE);
+                        
+                        
+                        if(shared_stuff->B[1] < shared_stuff->B[2]){
+                            
+                            temp = shared_stuff->B[1];
+                            shared_stuff->B[1] = shared_stuff->B[2];
+                            shared_stuff->B[2] = temp;
+                            
+                        }
+                        
+                        if(!semaphore_p(1) || !semaphore_p(2)) exit(EXIT_FAILURE);
+                        
+                    } else if(index == 2) {
+                        
+                        if(!semaphore_p(2) || !semaphore_p(3)) exit(EXIT_FAILURE);
+                    
+                    
+                    if(shared_stuff->B[2] < shared_stuff->B[3]){
+                        
+                        temp = shared_stuff->B[2];
+                        shared_stuff->B[2] = shared_stuff->B[3];
+                        shared_stuff->B[3] = temp;
+                        
                     }
                     
-                    
+                    if(!semaphore_p(2) || !semaphore_p(3)) exit(EXIT_FAILURE);
+                        
+                    } else if(index == 3) {
+                        
+                        //third paid
+                        if(!semaphore_p(3)) exit(EXIT_FAILURE);
+                        
+                        
+                        if(shared_stuff->B[3] < shared_stuff->B[4]){
+                            
+                            temp = shared_stuff->B[3];
+                            shared_stuff->B[3] = shared_stuff->B[4];
+                            shared_stuff->B[4] = temp;
+                            
+                        }
+                        
+                        if(!semaphore_p(3)) exit(EXIT_FAILURE);
                     
                 }
+                    
+                    
         }
+                
+            default:
+                
+                if(pid != 0){
+                    for (int k = 0; k < 4; k++) wait(&waitTime);
+                }
+                
+                printf("%d,%d,%d,%d,%d\n", shared_stuff->B[0], shared_stuff->B[1], shared_stuff->B[2], shared_stuff->B[3], shared_stuff->B[4]);
+                printf("Lowest value: %d\n", shared_stuff->B[4]);
+                printf("Median value: %d\n", shared_stuff->B[2]);
+                printf("Highest value: %d\n", shared_stuff->B[0]);
+                
+                //delete semaphores
+                del_semvalue(1);
+                del_semvalue(2);
+                del_semvalue(3);
+                
+                //detach shared_mem
+                if (shmdt(shared_memory) == -1) {
+                    fprintf(stderr, "shmdt failed\n");
+                    exit(EXIT_FAILURE);
+                }
+                if (shmctl(shmid, IPC_RMID, 0) == -1) {
+                    fprintf(stderr, "shmctl(IPC_RMID) failed\n");
+                    exit(EXIT_FAILURE);
+                }
+                
         
     }
     
     
 }
+
+
