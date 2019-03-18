@@ -148,7 +148,7 @@ int main(){
                    (shared_stuff->B[0] > shared_stuff->B[1] &&
                     shared_stuff->B[1] > shared_stuff->B[2] &&
                     shared_stuff->B[2] > shared_stuff->B[3] &&
-                    shared_stuff->B[3] > shared_stuff->B[4]){
+                    shared_stuff->B[3] > shared_stuff->B[4])){
                        
                 if (index == 0) {
                     //first pair
