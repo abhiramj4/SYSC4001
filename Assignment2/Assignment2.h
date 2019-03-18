@@ -2,7 +2,7 @@
 //  Assignment2.h
 //  
 //
-//  Created by Abhiram Santhosh on 3/13/19.
+//  Created by Abhiram Santhosh and Gabriele Sarwar.
 //
 
 #ifndef Assignment2_h
