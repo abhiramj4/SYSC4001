@@ -15,3 +15,8 @@
 struct shared_use {
     int B[5]; //array of numbers to be shared
 };
+union semun {
+    int val;
+    struct semid_ds *buf;
+    unsigned short *array;
+};
