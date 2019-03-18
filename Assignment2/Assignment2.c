@@ -70,6 +70,9 @@ int main(){
     pid_t pid = getpid();
     int waitTime;
     int temp; //temp for switching variables around
+    char input[20];
+    bool invalid = 0;
+    int debug = 0;
     
     for(int i = 0; i < 3; i++){
         //creating three semaphores
@@ -108,6 +111,53 @@ int main(){
     shared_stuff->B[4] = 7;
     
         printf("%d,%d,%d,%d,%d\n", shared_stuff->B[0], shared_stuff->B[1], shared_stuff->B[2], shared_stuff->B[3], shared_stuff->B[4]);
+    
+   
+            //user input stuff
+    do{
+        invalid = 0;
+        printf("do you want to access debug mode? type yes or no");
+        scanf("%s",userinput);
+        if(userinput[1] != '\0'){
+            invalid = 1;
+            printf("not a valid argument\n");
+        }
+        else if(userinput[0] == 'yes'){	//  debug mode on
+            debug = 1;
+        }
+        else if(userinput[0] == 'no'){	 
+            debug = 0;
+        }else{
+            invalid = 1;
+            printf("not a valid argument\n");
+        }
+    }while(invalid);
+    
+    //ask for the 5 integeres
+    printf("Enter 5 different integers\n");
+    
+    for(int i=0; i<5; i++){
+        int finished = 0;
+        do{
+            bool validinput = 1;
+            char numberinput[30];
+            printf("Enter integer : ");
+            scanf("%s", numberinput);
+            for(int b = 0;  numberinput[b] != '\0'; b++){
+                if(!isdigit(numberinput[b])){
+                    validinput = 0;
+                    break;
+                }
+            }
+            if(valid){	// convert to integer to see input
+                shared_stuff->B[i] = atoi(numberinput);
+                finished = 1;
+            }else{
+                printf("Invalid! try again\n");
+            }
+        }while(finished == 0);
+    }
+      
     
     //fork 4 times, four children
     index = -1;
@@ -159,7 +209,9 @@ int main(){
                         temp = shared_stuff->B[index];
                         shared_stuff->B[index] = shared_stuff->B[index+1];
                         shared_stuff->B[index+1] = temp;
-                        
+                       if(debug)printf("Process P1: performed swapping\n");
+                    }else{
+                        if(debug)printf("Process P1: No swapping\n");
                     }
                     if (!semaphore_v(1)) exit(EXIT_FAILURE); //Signal
                 }
@@ -175,6 +227,9 @@ int main(){
                         shared_stuff->B[index] = shared_stuff->B[index+1];
                         shared_stuff->B[index+1] = temp;
                         
+                    if(debug)printf("Process P2: performed swapping\n");
+                    }else{
+                        if(debug)printf("Process P2: No swapping\n");
                     }
                     
                     if (!semaphore_v(1)) exit(EXIT_FAILURE);
@@ -191,6 +246,10 @@ int main(){
                         temp = shared_stuff->B[index];
                         shared_stuff->B[index] = shared_stuff->B[index+1];
                         shared_stuff->B[index+1] = temp;
+                  
+                        if(debug)printf("Process P3: performed swapping\n");
+                    }else{
+                        if(debug)printf("Process P3: No swapping\n");
                     }
                     
                     if (!semaphore_v(2)) exit(EXIT_FAILURE);
@@ -206,6 +265,9 @@ int main(){
                         temp = shared_stuff->B[index];
                         shared_stuff->B[index] = shared_stuff->B[index+1];
                         shared_stuff->B[index+1] = temp;
+                         if(debug)printf("Process P4: performed swapping\n");
+                    }else{
+                        if(debug)printf("Process P4: No swapping\n");
                     }
                     
                     if (!semaphore_v(3)) exit(EXIT_FAILURE);
