@@ -111,7 +111,7 @@ struct node* find(int key) {
 }
 
 //find a link with a given employee number
-struct node* find(int employeeNum) {
+struct node* findLink(int employeeNum) {
     
     struct node* current = head; //start with first link
     

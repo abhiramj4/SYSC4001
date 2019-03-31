@@ -38,19 +38,20 @@ struct message_st {
 int main () {
     
     int running = 1;
-    int msgid;
+    int msgidAdminRecord;
+    int msgidRecordAdmin;
     struct message_st myMessage;
     char userinputString[MAX_TEXT];
     int userinputNumber;
     
-    msgid = msgget((key_t)1235, 0666 | IPC_CREAT);
+    msgidAdminRecord = msgget((key_t)1235, 0666 | IPC_CREAT);
     
     
     printf("here");
     
     
     
-    if (msgid == -1) {
+    if (msgidAdminRecord == -1) {
         fprintf(stderr, "msgget failed with error: %d\n", errno);
         exit(EXIT_FAILURE);
     }
@@ -174,19 +175,19 @@ int main () {
         }
         
         
-        if (msgsnd(msgid,(void *)&myMessage, sizeof(myMessage), 0) == -1) {
+        if (msgsnd(msgidAdminRecord,(void *)&myMessage, sizeof(myMessage), 0) == -1) {
             fprintf(stderr, "msgsnd failed\n");
             exit(EXIT_FAILURE);
         }
         
         
-        
+        /*
         if (msgrcv(msgid, (void *)&myMessage, BUFSIZ,
                    msg_to_receive, 0) == -1) {
             fprintf(stderr, "msgrcv failed with error: %d\n", errno);
             exit(EXIT_FAILURE);
         }
-        
+        */
         
         if (strncmp(userinputString, "end", 3) == 0) {
             running = 0;

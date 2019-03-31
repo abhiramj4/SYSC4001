@@ -38,21 +38,23 @@ struct message_st {
 int main () {
     
     int running = 1;
-    int msgid;
+    int msgidAdminRecord; //messages recieved from the admin
+    int msgidRecordAdmin //messages to be sent to the admin
     struct message_st myMessage;
     long int msg_to_receive = 0;
     int linkedListKey = 0;
     
-    msgid = msgget((key_t)1235, 0666 | IPC_CREAT);
+    //need to use two message queues
+    msgidAdminRecord = msgget((key_t)1235, 0666 | IPC_CREAT);
     
-    if (msgid == -1) {
+    if (msgidAdminRecord == -1) {
         fprintf(stderr, "msgget failed with error: %d\n", errno);
         exit(EXIT_FAILURE);
     }
     
     while (running){
         
-        if (msgrcv(msgid, (void *)&myMessage, BUFSIZ,
+        if (msgrcv(msgidAdminRecord, (void *)&myMessage, BUFSIZ,
                    msg_to_receive, 0) == -1) {
             fprintf(stderr, "msgrcv failed with error: %d\n", errno);
             exit(EXIT_FAILURE);
@@ -68,6 +70,10 @@ int main () {
         
         if(myMessage.type == 1){
             //check name command
+            printf("message type was check name! \n");
+            struct node *result = NULL;
+            result = findLink(myMessage.employeeNum);
+            printf("The employee name is: %s", result->name);
         }
         
         printList();
