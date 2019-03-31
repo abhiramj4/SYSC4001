@@ -17,8 +17,8 @@
 struct message_st {
     
     long int message_type;
-    char name[MAX_TEXT];
-    char departmentName[MAX_TEXT];
+    char name[500];
+    char departmentName[500];
     int employeeNum;
     int salary;
     int type; //type of message sent
@@ -37,7 +37,7 @@ struct message_st {
 
 int main () {
     
-    int running = 1
+    int running = 1;
     int msgid;
     struct message_st myMessage;
     long int msg_to_receive = 0;
@@ -51,17 +51,15 @@ int main () {
     
     while (running){
         
-        if (msgrcv(msgid, (void *)&some_data, BUFSIZ,
-                   msg_to_receive, 0) == -1) {
+        if (msgrcv(msgid, (void *)&myMessage, sizeof(myMessage),
+                   1, 0) == -1) {
             fprintf(stderr, "msgrcv failed with error: %d\n", errno);
             exit(EXIT_FAILURE);
         }
         
         printf("The type of message was: %i \n", myMessage.type);
         
-        if (myMessage.type == 7) {
-            
-            running = 0;
-    }
+        msgctl(msgid, IPC_RMID, NULL);
     
+}
 }

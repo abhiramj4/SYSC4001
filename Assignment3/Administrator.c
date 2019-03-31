@@ -11,10 +11,10 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
-
+#include <sys/ipc.h>
 #include <sys/msg.h>
 
-#define MAX_TEXT 512
+#define MAX_TEXT 12
 
 struct message_st {
     
@@ -64,7 +64,7 @@ int main () {
         printf("Enter a command: ");
         scanf("%s", &userinputString);
         printf("\n");
-        
+        myMessage.message_type = 1;
         //printf("%s", userinput);
         
         if(strcmp(userinputString,"input") == 0){
@@ -98,7 +98,7 @@ int main () {
             
         }
         
-        if(strcmp(userinputString,"check_name") == 0){
+       else if(strcmp(userinputString,"check_name") == 0){
             
             printf("Enter a employee number:");
             scanf("%i", &userinputNumber);
@@ -109,7 +109,7 @@ int main () {
             
         }
         
-        if(strcmp(userinputString,"check_department") == 0){
+       else if(strcmp(userinputString,"check_department") == 0){
             
             printf("Enter a employee number:");
             scanf("%i", &userinputNumber);
@@ -120,7 +120,7 @@ int main () {
             
         }
         
-        if(strcmp(userinputString,"check_salary") == 0){
+       else if(strcmp(userinputString,"check_salary") == 0){
             
             printf("Enter a employee number:");
             scanf("%i", &userinputNumber);
@@ -131,7 +131,7 @@ int main () {
             
         }
         
-        if(strcmp(userinputString,"check_employee_number") == 0){
+       else if(strcmp(userinputString,"check_employee_number") == 0){
             
             printf("Enter a employee name:");
             scanf("%s", &userinputString);
@@ -142,7 +142,7 @@ int main () {
             
         }
         
-        if(strcmp(userinputString,"check") == 0){
+       else if(strcmp(userinputString,"check") == 0){
             
             printf("Enter a department name:");
             scanf("%s", &userinputString);
@@ -153,7 +153,7 @@ int main () {
             
         }
         
-        if(strcmp(userinputString,"delete") == 0){
+       else if(strcmp(userinputString,"delete") == 0){
             
             printf("Enter a employee number:");
             scanf("%i", &userinputNumber);
@@ -164,41 +164,35 @@ int main () {
             
         }
         
-        if (strncmp(userinputString, "end", 3) == 0) {
-            myMessage.type = 7;
-            
-            if (msgsnd(msgid, (void *)&myMessage, MAX_TEXT, 0) == -1) {
-                fprintf(stderr, "msgsnd failed\n");
-                exit(EXIT_FAILURE);
-            }
-            
-            running = 0;
-        }
+        
+       else {
+           printf("Error!");
+       }
         
         
-        if (msgsnd(msgid, (void *)&myMessage, MAX_TEXT, 0) == -1) {
+        if (msgsnd(msgid,(void *)&myMessage, sizeof(myMessage), 0) == -1) {
             fprintf(stderr, "msgsnd failed\n");
             exit(EXIT_FAILURE);
         }
+    
+    if (strncmp(userinputString, "end", 3) == 0) {
+        running = 0;
+    }
         
+        
+        /*
         if (msgrcv(msgid, (void *)&myMessage, BUFSIZ,
                    msg_to_receive, 0) == -1) {
             fprintf(stderr, "msgrcv failed with error: %d\n", errno);
             exit(EXIT_FAILURE);
         }
         
-        
+        */
         
         
         
     }
     
-    
-    
-    if (msgctl(msgid, IPC_RMID, 0) == -1) {
-        fprintf(stderr, "msgctl(IPC_RMID) failed\n");
-        exit(EXIT_FAILURE);
-    }
     
     exit(EXIT_SUCCESS);
     
