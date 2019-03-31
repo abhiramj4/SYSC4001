@@ -179,11 +179,14 @@ int main () {
             exit(EXIT_FAILURE);
         }
         
+        
+        
         if (msgrcv(msgid, (void *)&myMessage, BUFSIZ,
                    msg_to_receive, 0) == -1) {
             fprintf(stderr, "msgrcv failed with error: %d\n", errno);
             exit(EXIT_FAILURE);
         }
+        
         
         if (strncmp(userinputString, "end", 3) == 0) {
             running = 0;

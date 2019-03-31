@@ -62,8 +62,15 @@ int main () {
         
         if(myMessage.type == 0){
             //insert command
-            insertFirst(linkedListKey, )
+            printf("message type was input!");
+            insertFirst(linkedListKey, myMessage.name, myMessage.departmentName, myMessage.employeeNum, myMessage.salary);
         }
+        
+        if(myMessage.type == 1){
+            //check name command
+        }
+        
+        printList();
         
         if(myMessage.type == 7){
             running = 0;

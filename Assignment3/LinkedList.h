@@ -29,7 +29,7 @@ void printList() {
     
     //start from the beginning
     while(ptr != NULL) {
-        printf("(%d: %d %s %s %d) ",ptr->key,ptr->employeeNum, ptr->name, ptr->departmentName, ptr-salary);
+        printf("(%d: %d %s %s %d) ",ptr->key,ptr->employeeNum, ptr->name, ptr->departmentName, ptr->salary);
         ptr = ptr->next;
     }
     
@@ -42,8 +42,8 @@ void insertFirst(int key, char name[12], char departmentName[12], int employeeNu
     struct node *link = (struct node*) malloc(sizeof(struct node));
     
     link->key = key;
-    link->name = name;
-    link->departmentName = departmentName;
+    strcpy(link->name, name);
+    strcpy(link->departmentName, departmentName);
     link->employeeNum = employeeNum;
     link->salary = salary;
     
@@ -108,6 +108,28 @@ struct node* find(int key) {
     
     //if data found, return the current Link
     return current;
+}
+
+//find a link with a given employee number
+struct node* find(int employeeNum) {
+    
+    struct node* current = head; //start with first link
+    
+    if(head == NULL){
+        return NULL;
+    }
+    
+    //traverse the whole linked list
+    while(current->employeeNum != employeeNum){
+        if(current->next == NULL){
+            return NULL;
+        } else {
+            current = current->next;
+        }
+    }
+    
+    return current;
+    
 }
 
 
