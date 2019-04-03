@@ -43,11 +43,14 @@ int main () {
     struct message_st myMessage;
     char userinputString[MAX_TEXT];
     int userinputNumber;
+    long int msg_to_receive = 0;
     
-    msgidAdminRecord = msgget((key_t)1235, 0666 | IPC_CREAT);
+    //need to use two message queues
+    msgidAdminRecord = msgget((key_t)1235, 0666 | IPC_CREAT); //this sends messages from the admin to here (the record)
     
+    msgidRecordAdmin = msgget((key_t)1236, 0666 | IPC_CREAT); //this sends messages from here to the admin
     
-    printf("here");
+    //printf("here");
     
     
     
@@ -56,6 +59,10 @@ int main () {
         exit(EXIT_FAILURE);
     }
     
+    if (msgidRecordAdmin == -1) {
+        fprintf(stderr, "msgget failed with error: %d\n", errno);
+        exit(EXIT_FAILURE);
+    }
     
     
     while (running){
@@ -182,12 +189,14 @@ int main () {
         
         
         /*
-        if (msgrcv(msgid, (void *)&myMessage, BUFSIZ,
+        if (msgrcv(msgidRecordAdmin, (void *)&myMessage, BUFSIZ,
                    msg_to_receive, 0) == -1) {
             fprintf(stderr, "msgrcv failed with error: %d\n", errno);
             exit(EXIT_FAILURE);
         }
         */
+        
+        printf("Got message!");
         
         if (strncmp(userinputString, "end", 3) == 0) {
             running = 0;
