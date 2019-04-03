@@ -188,15 +188,17 @@ int main () {
         }
         
         
-        /*
+        
         if (msgrcv(msgidRecordAdmin, (void *)&myMessage, BUFSIZ,
                    msg_to_receive, 0) == -1) {
             fprintf(stderr, "msgrcv failed with error: %d\n", errno);
             exit(EXIT_FAILURE);
+        } else {
+            
+            printf("Got message!");
+            
         }
-        */
         
-        printf("Got message!");
         
         if (strncmp(userinputString, "end", 3) == 0) {
             running = 0;

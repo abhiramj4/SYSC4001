@@ -133,12 +133,12 @@ int main () {
         
         //send message
         
-        /*
-        if (msgsnd(msgidAdminRecord,(void *)&myMessage, sizeof(myMessage), 0) == -1) {
+        
+        if (msgsnd(msgidRecordAdmin,(void *)&myMessage, sizeof(myMessage), 0) == -1) {
             fprintf(stderr, "msgsnd failed\n");
             exit(EXIT_FAILURE);
         }
-        */
+        
         
         //strcpy(myMessage.name, result->name);
         
