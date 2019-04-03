@@ -1,0 +1,17 @@
+CC=gcc
+CFLAGS=-Wall
+
+client: Administrator.o RecordKeeper.o
+	$(CC) -o Administrator admin.o RecordKeeper.o
+
+server: RecordKeeper.o RecordKeeper.o
+	$(CC) -o server RecordKeeper.o
+
+keeper.o: keeper.c record.h
+	$(CC) $(CFLAGS) -c keeper.c
+
+Administrator.o: Administrator.c RecordKeeper.h
+	$(CC) $(CFLAGS) -c Administrator.c
+
+LinkedList.o: Administrator.c LinkedList.h
+	$(CC) $(CFLAGS) -c LinkedList.o
