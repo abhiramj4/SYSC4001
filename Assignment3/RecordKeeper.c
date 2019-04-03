@@ -39,7 +39,7 @@ int main () {
     
     int running = 1;
     int msgidAdminRecord; //messages recieved from the admin
-    int msgidRecordAdmin //messages to be sent to the admin
+    int msgidRecordAdmin; //messages to be sent to the admin
     struct message_st myMessage;
     long int msg_to_receive = 0;
     int linkedListKey = 0;
