@@ -1,0 +1,12 @@
+discussion of the Test Cases for each command
+
+1. Insert Command: When the user (i) inputted the command insert the program prompted me to put the characteristics
+needed as it should have. This was further more testes once the next commands were executed.
+
+2. Check_name command: When the user inputs check_name the program succesfully returned the emplyee name and nummber.
+
+3. Check_salary command: WHen the user inputted this command the program succesfully returned an integer representing the salary.
+
+4. Check_employee_number command: When the user inputted this command the program returned the right integer employee number.
+
+5. Delete command: this commmand succesfully deleted the corresponding record after prompting for the employee number.
