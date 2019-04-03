@@ -117,9 +117,17 @@ int main () {
             //strcpy(myMessage.name, result->name);
             
         } else if (myMessage.type == 5){
-            
+      /* Check (department name): In response to this command Record-Keeper must return the
+     employee numbers of all the employees that work in the department identified by the argument
+    for this command.
+    */
             //check employee number
-            printf("message type was check employee number! \n");
+            printf("message type was check ! \n");
+             //check department
+            printf("message type was check department! \n");
+            findLink2(myMessage.departmentName);
+            printf("The employee deptartment is: %s", result->departmentName);
+            strcpy(myMessage.departmentName, result->departmentName);
         } else if (myMessage.type == 6) {
             
             //delete employee
