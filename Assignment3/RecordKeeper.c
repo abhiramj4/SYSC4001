@@ -1,6 +1,6 @@
 //
 //  RecordKeeper.c
-//  
+//
 //
 //  Created by Abhiram Santhosh on 3/30/19.
 //
@@ -29,8 +29,10 @@ struct message_st {
     //4 for check employee number
     //5 for check (dept name)
     //6 for delete
-    int end;
+    //7 for end
 };
+
+
 
 
 
@@ -38,123 +40,132 @@ struct message_st {
 int main () {
     
     int running = 1;
-    int msgidAdminRecord; //messages recieved from the admin
-    int msgidRecordAdmin; //messages to be sent to the admin
-    struct message_st myMessage;
+    
+    int msgidAdmintoRecord;
+    int msgidRecordtodAdmin;
+    
+    struct message_st messageAdmintoRecord;
+    struct message_st messageRecordtoAdmin;
+    
     long int msg_to_receive = 0;
     int linkedListKey = 0;
     
-    //need to use two message queues
-    msgidAdminRecord = msgget((key_t)1235, 0666 | IPC_CREAT); //this sends messages from the admin to here (the record)
+    msgidAdmintoRecord = msgget((key_t)1235, 0666 | IPC_CREAT);
     
-    msgidRecordAdmin = msgget((key_t)1236, 0666 | IPC_CREAT); //this sends messages from here to the admin
-    
+    msgidRecordtodAdmin = msgget((key_t)1236, 0666 | IPC_CREAT);
     
     
     
-    if (msgidAdminRecord == -1) {
+    if (msgidAdmintoRecord == -1) {
         fprintf(stderr, "msgget failed with error: %d\n", errno);
         exit(EXIT_FAILURE);
     }
     
-    if (msgidRecordAdmin == -1) {
+    if (msgidRecordtodAdmin == -1) {
         fprintf(stderr, "msgget failed with error: %d\n", errno);
         exit(EXIT_FAILURE);
     }
+    
+    
     
     while (running){
         
-        if (msgrcv(msgidAdminRecord, (void *)&myMessage, BUFSIZ,
+        if (msgrcv(msgidAdmintoRecord, (void *)&messageAdmintoRecord, BUFSIZ,
                    msg_to_receive, 0) == -1) {
             fprintf(stderr, "msgrcv failed with error: %d\n", errno);
             exit(EXIT_FAILURE);
         }
         
-        printf("The type of message was: %i \n", myMessage.type);
+        printf("The type of message was: %i \n", messageAdmintoRecord.type);
         
-        if(myMessage.type == 0){
-            
+        if(messageAdmintoRecord.type == 0){
             //insert command
             printf("message type was input!");
-            insertFirst(linkedListKey, myMessage.name, myMessage.departmentName, myMessage.employeeNum, myMessage.salary);
+            insertFirst(linkedListKey, messageAdmintoRecord.name, messageAdmintoRecord.departmentName, messageAdmintoRecord.employeeNum, messageAdmintoRecord.salary);
         }
         
-        else if(myMessage.type == 1){
-            
+        if(messageAdmintoRecord.type == 1){
             //check name command
             printf("message type was check name! \n");
             struct node *result = NULL;
-            result = findLink(myMessage.employeeNum);
+            result = findLink(messageAdmintoRecord.employeeNum);
             printf("The employee name is: %s", result->name);
-            strcpy(myMessage.name, result->name);
+            strcpy(messageRecordtoAdmin.name, result->name);
+            messageRecordtoAdmin.type = 1;
         }
         
-        else if(myMessage.type == 2){
-            
-            //check department
+        if(messageAdmintoRecord.type == 2){
+            //check department command
             printf("message type was check department! \n");
             struct node *result = NULL;
-            result = findLink(myMessage.employeeNum);
-            printf("The employee deptartment is: %s", result->departmentName);
-            strcpy(myMessage.departmentName, result->departmentName);
-            
-        } else if (myMessage.type == 3) {
-            
-            //check salary
-            printf("message type was check salary! \n");
-            struct node *result = NULL;
-            result = findLink(myMessage.employeeNum);
-            printf("The employee salary is: %i", result->salary);
-            myMessage.salary = result->salary;
-            
-        } else if (myMessage.type == 4) {
-            
-            //check employee number
-            printf("message type was check employee number! \n");
-            //struct node *result = NULL;
-            //result = findLinkName(myMessage.name);
-            //printf("The employee name is: %s", result->name);
-            //strcpy(myMessage.name, result->name);
-            
-        } else if (myMessage.type == 5){
-      /* Check (department name): In response to this command Record-Keeper must return the
-     employee numbers of all the employees that work in the department identified by the argument
-    for this command.
-    */
-            //check employee number
-            printf("message type was check ! \n");
-             //check department
-            //printf("message type was check department! \n");
-            //findLink2(myMessage.departmentName);
-            //printf("The employee deptartment is: %s", result->departmentName);
-            //strcpy(myMessage.departmentName, result->departmentName);
-        } else if (myMessage.type == 6) {
-            
-            //delete employee
-            printf("The message type was delete \n");
-            struct node *result = NULL;
-            result = delete(myMessage.employeeNum);
-            printf("0");
-        } else {
-            printf("error \n");
+            result = findLink(messageAdmintoRecord.employeeNum);
+            printf("The employee department is: %s", result->departmentName);
+            strcpy(messageRecordtoAdmin.departmentName, result->departmentName);
+            messageRecordtoAdmin.type = 2;
         }
         
-        //send message
+        if(messageAdmintoRecord.type == 3){
+            //check department command
+            printf("message type was check salary! \n");
+            struct node *result = NULL;
+            result = findLink(messageAdmintoRecord.employeeNum);
+            printf("The employee salary is: %i", result->salary);
+            messageRecordtoAdmin.salary = result->salary;
+            messageRecordtoAdmin.type = 3;
+        }
+        
+        if(messageAdmintoRecord.type == 4){
+            //check department command
+            printf("message type was check employee number! \n");
+            struct node *result = NULL;
+            result = findLinkName(messageRecordtoAdmin.name);
+            printf("The employees number is: %i", result->employeeNum);
+            messageRecordtoAdmin.employeeNum = result->employeeNum;
+            messageRecordtoAdmin.type = 4;
+        }
+        
+        if(messageAdmintoRecord.type == 5){
+            //check department command
+            printf("message type was check ! \n");
+            messageRecordtoAdmin.type = 5;
+            
+        }
+        
+        if(messageAdmintoRecord.type == 6){
+            //check department command
+            printf("message type was delete employee! \n");
+            struct node *result = NULL;
+            result = deleteSpecific(messageRecordtoAdmin.employeeNum);
+            
+            
+            if(result == NULL){
+                messageRecordtoAdmin.type = 6;
+            } else {
+                messageRecordtoAdmin.type = 8;
+            }
+        }
         
         
-        if (msgsnd(msgidRecordAdmin,(void *)&myMessage, sizeof(myMessage), 0) == -1) {
+        if (msgsnd(msgidRecordtodAdmin, (void *)&messageRecordtoAdmin, sizeof(messageRecordtoAdmin), 0) == -1){
             fprintf(stderr, "msgsnd failed\n");
             exit(EXIT_FAILURE);
         }
         
-        
-        //strcpy(myMessage.name, result->name);
-        
-        //printList();
-        
-        if(myMessage.type == 7){
+        if(messageAdmintoRecord.type == 7){
             running = 0;
         }
-    
+        
     }
+    
+    if (msgctl(msgidAdmintoRecord, IPC_RMID, 0) == -1) {
+        fprintf(stderr, "msgctl(IPC_RMID) failed\n");
+        exit(EXIT_FAILURE);
+    }
+    
+    if (msgctl(msgidRecordtodAdmin, IPC_RMID, 0) == -1) {
+        fprintf(stderr, "msgctl(IPC_RMID) failed\n");
+        exit(EXIT_FAILURE);
+    }
+    
+    exit(EXIT_SUCCESS);
 }

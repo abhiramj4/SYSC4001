@@ -1,6 +1,6 @@
 //
 //  LinkedList.h
-//  
+//
 //
 //  Created by Abhiram Santhosh on 3/31/19.
 //
@@ -132,6 +132,27 @@ struct node* findLink(int employeeNum) {
     
 }
 
+//find a link with a given employee number
+struct node* findLinkName(char * name) {
+    
+    struct node* current = head; //start with first link
+    
+    if(head == NULL){
+        return NULL;
+    }
+    
+    //traverse the whole linked list
+    while(current->name != name){
+        if(current->next == NULL){
+            return NULL;
+        } else {
+            current = current->next;
+        }
+    }
+    
+    return current;
+    
+}
 
 //delete a link with given key
 struct node* delete(int key) {
@@ -147,6 +168,44 @@ struct node* delete(int key) {
     
     //navigate through list
     while(current->key != key) {
+        
+        //if it is last node
+        if(current->next == NULL) {
+            return NULL;
+        } else {
+            //store reference to current link
+            previous = current;
+            //move to next link
+            current = current->next;
+        }
+    }
+    
+    //found a match, update the link
+    if(current == head) {
+        //change first to point to next link
+        head = head->next;
+    } else {
+        //bypass the current link
+        previous->next = current->next;
+    }
+    
+    return current;
+}
+
+//delete a link with given key
+struct node* deleteSpecific(int employeeNum) {
+    
+    //start from the first link
+    struct node* current = head;
+    struct node* previous = NULL;
+    
+    //if list is empty
+    if(head == NULL) {
+        return NULL;
+    }
+    
+    //navigate through list
+    while(current->employeeNum != employeeNum) {
         
         //if it is last node
         if(current->next == NULL) {

@@ -1,6 +1,6 @@
 //
 //  Administrator.c
-//  
+//
 //
 //  Created by Abhiram Santhosh on 3/30/19.
 //
@@ -35,34 +35,39 @@ struct message_st {
 };
 
 
+
+
 int main () {
     
     int running = 1;
-    int msgidAdminRecord;
-    int msgidRecordAdmin;
-    struct message_st myMessage;
+    
+    int msgidAdmintoRecord;
+    int msgidRecordtodAdmin;
+    
+    struct message_st messageAdmintoRecord;
+    struct message_st messageRecordtoAdmin;
+    
     char userinputString[MAX_TEXT];
     int userinputNumber;
     long int msg_to_receive = 0;
     
-    //need to use two message queues
-    msgidAdminRecord = msgget((key_t)1235, 0666 | IPC_CREAT); //this sends messages from the admin to here (the record)
+    msgidAdmintoRecord = msgget((key_t)1235, 0666 | IPC_CREAT);
     
-    msgidRecordAdmin = msgget((key_t)1236, 0666 | IPC_CREAT); //this sends messages from here to the admin
-    
-    //printf("here");
+    msgidRecordtodAdmin = msgget((key_t)1236, 0666 | IPC_CREAT);
     
     
     
-    if (msgidAdminRecord == -1) {
+    
+    if (msgidAdmintoRecord == -1) {
         fprintf(stderr, "msgget failed with error: %d\n", errno);
         exit(EXIT_FAILURE);
     }
     
-    if (msgidRecordAdmin == -1) {
+    if (msgidRecordtodAdmin == -1) {
         fprintf(stderr, "msgget failed with error: %d\n", errno);
         exit(EXIT_FAILURE);
     }
+    
     
     
     while (running){
@@ -72,36 +77,36 @@ int main () {
         printf("Enter a command: ");
         scanf("%s", &userinputString);
         printf("\n");
-        myMessage.message_type = 1;
+        messageAdmintoRecord.message_type = 1;
         //printf("%s", userinput);
         
         if(strcmp(userinputString,"input") == 0){
             
             printf("Enter a name:");
             scanf("%s", &userinputString);
-            strcpy(myMessage.name, userinputString);
+            strcpy(messageAdmintoRecord.name, userinputString);
             printf("\n");
             //printf("\n");
             
             printf("Enter a department name:");
             scanf("%s", &userinputString);
-            strcpy(myMessage.departmentName, userinputString);
+            strcpy(messageAdmintoRecord.departmentName, userinputString);
             printf("\n");
             //printf("\n");
             
             printf("Enter a employee number:");
             scanf("%i", &userinputNumber);
-            myMessage.employeeNum = userinputNumber;
+            messageAdmintoRecord.employeeNum = userinputNumber;
             printf("\n");
             //printf("\n");
             
             printf("Enter a salary:");
             scanf("%i", &userinputNumber);
-            myMessage.salary = userinputNumber;
+            messageAdmintoRecord.salary = userinputNumber;
             printf("\n");
             //printf("\n");
             
-            myMessage.type = 0;
+            messageAdmintoRecord.type = 0;
             
             
         }
@@ -110,10 +115,10 @@ int main () {
             
             printf("Enter a employee number:");
             scanf("%i", &userinputNumber);
-            myMessage.employeeNum = userinputNumber;
+            messageAdmintoRecord.employeeNum = userinputNumber;
             printf("\n");
             
-            myMessage.type = 1;
+            messageAdmintoRecord.type = 1;
             
         }
         
@@ -121,10 +126,10 @@ int main () {
             
             printf("Enter a employee number:");
             scanf("%i", &userinputNumber);
-            myMessage.employeeNum = userinputNumber;
+            messageAdmintoRecord.employeeNum = userinputNumber;
             printf("\n");
             
-            myMessage.type = 2;
+            messageAdmintoRecord.type = 2;
             
         }
         
@@ -132,10 +137,10 @@ int main () {
             
             printf("Enter a employee number:");
             scanf("%i", &userinputNumber);
-            myMessage.employeeNum = userinputNumber;
+            messageAdmintoRecord.employeeNum = userinputNumber;
             printf("\n");
             
-            myMessage.type = 3;
+            messageAdmintoRecord.type = 3;
             
         }
         
@@ -143,10 +148,10 @@ int main () {
             
             printf("Enter a employee name:");
             scanf("%s", &userinputString);
-            strcpy(myMessage.name, userinputString);
+            strcpy(messageAdmintoRecord.name, userinputString);
             printf("\n");
             
-            myMessage.type = 4;
+            messageAdmintoRecord.type = 4;
             
         }
         
@@ -154,10 +159,10 @@ int main () {
             
             printf("Enter a department name:");
             scanf("%s", &userinputString);
-            strcpy(myMessage.departmentName, userinputString);
+            strcpy(messageAdmintoRecord.departmentName, userinputString);
             printf("\n");
             
-            myMessage.type = 5;
+            messageAdmintoRecord.type = 5;
             
         }
         
@@ -165,38 +170,67 @@ int main () {
             
             printf("Enter a employee number:");
             scanf("%i", &userinputNumber);
-            myMessage.employeeNum = userinputNumber;
+            messageAdmintoRecord.employeeNum = userinputNumber;
             printf("\n");
             
-            myMessage.type = 6;
+            messageAdmintoRecord.type = 6;
             
         } else if(strcmp(userinputString,"end") == 0){
             printf("Messages ended");
-            myMessage.type = 7;
+            messageAdmintoRecord.type = 7;
             printf("\n");
         }
         
         
         else {
-            printf("Error!");
+            printf("Error! Not a correct command");
         }
         
         
-        if (msgsnd(msgidAdminRecord,(void *)&myMessage, sizeof(myMessage), 0) == -1) {
+        if (msgsnd(msgidAdmintoRecord,(void *)&messageAdmintoRecord, sizeof(messageAdmintoRecord), 0) == -1) {
             fprintf(stderr, "msgsnd failed\n");
             exit(EXIT_FAILURE);
         }
         
         
-        
-        if (msgrcv(msgidRecordAdmin, (void *)&myMessage, BUFSIZ,
-                   msg_to_receive, 0) == -1) {
+        if(msgrcv(msgidRecordtodAdmin, (void *)&messageRecordtoAdmin, sizeof(messageRecordtoAdmin), msg_to_receive,0) == -1) {
             fprintf(stderr, "msgrcv failed with error: %d\n", errno);
             exit(EXIT_FAILURE);
-        } else {
-            
-            printf("Got message!");
-            
+        }
+        
+        if(messageRecordtoAdmin.type == 1){
+            //check name
+            printf("%s \n",messageRecordtoAdmin.name);
+        }
+        
+        if(messageRecordtoAdmin.type == 2){
+            //check name
+            printf("%s \n",messageRecordtoAdmin.departmentName);
+        }
+        
+        if(messageRecordtoAdmin.type == 3){
+            //check name
+            printf("%i \n",messageRecordtoAdmin.salary);
+        }
+        
+        if(messageRecordtoAdmin.type == 4){
+            //check name
+            printf("%i \n",messageRecordtoAdmin.employeeNum);
+        }
+        
+        if(messageRecordtoAdmin.type == 5){
+            //check name
+            printf("%this command is check! \n");
+        }
+        
+        if(messageRecordtoAdmin.type == 6){
+            //check name
+            printf("0 \n");
+        }
+        
+        if(messageRecordtoAdmin.type == 8){
+            //check name
+            printf("1 \n");
         }
         
         
@@ -204,13 +238,22 @@ int main () {
             running = 0;
         }
         
-         
+        
         
         
         
         
     }
     
+    if (msgctl(msgidAdmintoRecord, IPC_RMID, 0) == -1) {
+        fprintf(stderr, "msgctl(IPC_RMID) failed\n");
+        exit(EXIT_FAILURE);
+    }
+    
+    if (msgctl(msgidRecordtodAdmin, IPC_RMID, 0) == -1) {
+        fprintf(stderr, "msgctl(IPC_RMID) failed\n");
+        exit(EXIT_FAILURE);
+    }
     
     exit(EXIT_SUCCESS);
     
