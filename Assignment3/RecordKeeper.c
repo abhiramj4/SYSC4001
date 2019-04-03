@@ -124,10 +124,10 @@ int main () {
             //check employee number
             printf("message type was check ! \n");
              //check department
-            printf("message type was check department! \n");
-            findLink2(myMessage.departmentName);
-            printf("The employee deptartment is: %s", result->departmentName);
-            strcpy(myMessage.departmentName, result->departmentName);
+            //printf("message type was check department! \n");
+            //findLink2(myMessage.departmentName);
+            //printf("The employee deptartment is: %s", result->departmentName);
+            //strcpy(myMessage.departmentName, result->departmentName);
         } else if (myMessage.type == 6) {
             
             //delete employee
